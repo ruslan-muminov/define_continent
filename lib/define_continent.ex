@@ -36,16 +36,17 @@ defmodule DefineContinent do
   @type continent_id :: integer()
   @type continent_name :: String.t()
 
-  @spec get_continent_name_by_id(id :: continent_id()) :: continent_name()
-  def get_continent_name_by_id(1), do: "NORTH_AMERICA"
-  def get_continent_name_by_id(2), do: "SOUTH_AMERICA"
-  def get_continent_name_by_id(3), do: "EUROPE"
-  def get_continent_name_by_id(4), do: "AFRICA"
-  def get_continent_name_by_id(5), do: "AUSTRALIA"
-  def get_continent_name_by_id(6), do: "ASIA"
-  def get_continent_name_by_id(7), do: "ANTARKTIDA"
+  @spec get_continent_name_by_id(id :: continent_id()) :: {:ok, continent_name()} | {:error, :incorrect_continent_id}
+  def get_continent_name_by_id(1), do: {:ok, "NORTH_AMERICA"}
+  def get_continent_name_by_id(2), do: {:ok, "SOUTH_AMERICA"}
+  def get_continent_name_by_id(3), do: {:ok, "EUROPE"}
+  def get_continent_name_by_id(4), do: {:ok, "AFRICA"}
+  def get_continent_name_by_id(5), do: {:ok, "AUSTRALIA"}
+  def get_continent_name_by_id(6), do: {:ok, "ASIA"}
+  def get_continent_name_by_id(7), do: {:ok, "ANTARKTIDA"}
+  def get_continent_name_by_id(_), do: {:error, :incorrect_continent_id}
 
-  @spec get_continent_by_coordinates(lat :: latitude(), lon :: longitude()) :: continent_name()
+  @spec get_continent_by_coordinates(lat :: latitude(), lon :: longitude()) :: {:ok, continent_name()} | {:error, :notfound}
   def get_continent_by_coordinates(lat, lon) do
     continents = [@n_am, @s_am, @eu, @afr, @aus, @asi, @ant]
     point = %Geo.Point{coordinates: {lat, lon}}
