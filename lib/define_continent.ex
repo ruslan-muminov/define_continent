@@ -31,8 +31,8 @@ defmodule DefineContinent do
     {-60, -180}, {-60, 180}, {-90, 180}, {-90, -180}
   ]]}}
 
-  @type latitude :: number()
-  @type longitude :: number()
+  @type latitude :: number() | String.t()
+  @type longitude :: number() | String.t()
   @type continent_id :: integer()
   @type continent_name :: String.t()
 
@@ -48,6 +48,9 @@ defmodule DefineContinent do
 
   @spec get_continent_by_coordinates(lat :: latitude(), lon :: longitude()) :: {:ok, continent_name()} | {:error, :notfound}
   def get_continent_by_coordinates(lat, lon) do
+    lat = maybe_convert_to_number(lat)
+    lon = maybe_convert_to_number(lon)
+
     continents = [@n_am, @s_am, @eu, @afr, @aus, @asi, @ant]
     point = %Geo.Point{coordinates: {lat, lon}}
     find_continent(point, continents)
@@ -62,4 +65,10 @@ defmodule DefineContinent do
       _ -> find_continent(point, continents)
     end
   end
+
+  defp maybe_convert_to_number(str) when is_binary(str) do
+    {number, _} = Float.parse(str)
+    number
+  end
+  defp maybe_convert_to_number(number), do: number
 end
