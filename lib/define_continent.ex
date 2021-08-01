@@ -37,6 +37,7 @@ defmodule DefineContinent do
   @type continent_name :: String.t()
 
   @spec get_continent_name_by_id(id :: continent_id()) :: {:ok, continent_name()} | {:error, :incorrect_continent_id}
+  def get_continent_name_by_id(0), do: {:ok, "OTHER_WORLD"}
   def get_continent_name_by_id(1), do: {:ok, "NORTH_AMERICA"}
   def get_continent_name_by_id(2), do: {:ok, "SOUTH_AMERICA"}
   def get_continent_name_by_id(3), do: {:ok, "EUROPE"}
@@ -46,7 +47,7 @@ defmodule DefineContinent do
   def get_continent_name_by_id(7), do: {:ok, "ANTARKTIDA"}
   def get_continent_name_by_id(_), do: {:error, :incorrect_continent_id}
 
-  @spec get_continent_by_coordinates(lat :: latitude(), lon :: longitude()) :: {:ok, continent_name()} | {:error, :notfound}
+  @spec get_continent_by_coordinates(lat :: latitude(), lon :: longitude()) :: {:ok, continent_name()}
   def get_continent_by_coordinates(lat, lon) do
     lat = maybe_convert_to_number(lat)
     lon = maybe_convert_to_number(lon)
@@ -58,7 +59,7 @@ defmodule DefineContinent do
 
 
   defp find_continent(_, []),
-    do: {:error, :notfound}
+    do: {:ok, 0}
   defp find_continent(point, [{id, polygon} | continents]) do
     case Topo.contains?(polygon, point) do
       true -> {:ok, id}
